@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import './questao.dart';
 import './resposta.dart';
+import './resultado.dart';
 
 void main() {
   runApp(const PerguntaApp());
@@ -16,32 +16,53 @@ class PerguntaApp extends StatefulWidget {
 
 class _PerguntaAppState extends State<PerguntaApp> {
   int _perguntaSelecionada = 0;
+  final List<Map<String, Object>> _perguntas = const [
+    {
+      'texto': 'Qual e a sua cor favorita ?',
+      'respostas': ['Preto', 'Vermelho', 'Azul', 'Verde'],
+    },
+    {
+      'texto': 'Qual seu animal favorito ?',
+      'respostas': ['Tigre', 'Leao', 'Gato', 'Cachorro'],
+    },
+    {
+      'texto': 'Qual time voce torce ?',
+      'respostas': ['Palmeiras', 'Sao Paulo', 'Corinthians', 'Santos'],
+    }
+  ];
 
   void _responder() {
-    setState(() {
-      _perguntaSelecionada++;
-    });
+    if (temPerguntasSelecionada) {
+      setState(() {
+        _perguntaSelecionada++;
+      });
+    }
+  }
+
+  bool get temPerguntasSelecionada {
+    return _perguntaSelecionada < _perguntas.length;
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<String> perguntas = [
-      "Qual é a sua cor favorita ?",
-      "Qual é o seu animal preferido ?"
-    ];
+    List<String> respostas = temPerguntasSelecionada
+        ? _perguntas[_perguntaSelecionada].cast()['respostas']
+        : [];
 
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.greenAccent,
+          backgroundColor: Colors.black,
           title: const Center(child: Text('PERGUNTAS')),
         ),
-        body: Column(children: [
-          Questao(perguntas[_perguntaSelecionada]),
-          Resposta("Botão 1", _responder),
-          Resposta("Botão 2", _responder),
-          Resposta("Botão 3", _responder)
-        ]),
+        body: temPerguntasSelecionada
+            ? Column(
+                children: [
+                  Questao(_perguntas[_perguntaSelecionada]['texto'].toString()),
+                  ...respostas.map((t) => Resposta(t, _responder)).toList(),
+                ],
+              )
+            : const Resultado(),
       ),
     );
   }
