@@ -1,16 +1,26 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import './questao.dart';
+import './resposta.dart';
 
-main() => runApp(PerguntaApp());
+void main() {
+  runApp(const PerguntaApp());
+}
 
-class PerguntaApp extends StatelessWidget {
-  int perguntaSelecionada = 0;
+class PerguntaApp extends StatefulWidget {
+  const PerguntaApp({Key? key}) : super(key: key);
 
-  void responder() {
-    perguntaSelecionada++;
-    print(perguntaSelecionada);
+  @override
+  State<PerguntaApp> createState() => _PerguntaAppState();
+}
+
+class _PerguntaAppState extends State<PerguntaApp> {
+  int _perguntaSelecionada = 0;
+
+  void _responder() {
+    setState(() {
+      _perguntaSelecionada++;
+    });
   }
 
   @override
@@ -23,23 +33,15 @@ class PerguntaApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text("PERGUNTAS")),
+          backgroundColor: Colors.greenAccent,
+          title: const Center(child: Text('PERGUNTAS')),
         ),
-        body: Column(
-          children: [
-            Text(perguntas[perguntaSelecionada]),
-            ElevatedButton(
-                onPressed: responder, child: const Text("Resposta 1")),
-            ElevatedButton(
-                onPressed: () {
-                  log("Resposta com funcao anonima");
-                },
-                child: const Text("Resposta 2")),
-            ElevatedButton(
-                onPressed: () => {log("Resposta com arrow function")},
-                child: const Text("Resposta 3"))
-          ],
-        ),
+        body: Column(children: [
+          Questao(perguntas[_perguntaSelecionada]),
+          Resposta("Botão 1", _responder),
+          Resposta("Botão 2", _responder),
+          Resposta("Botão 3", _responder)
+        ]),
       ),
     );
   }
