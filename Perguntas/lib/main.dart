@@ -54,7 +54,6 @@ class _PerguntaAppState extends State<PerguntaApp> {
         _potuacaoTotal += potuacao;
       });
     }
-    print(_potuacaoTotal);
   }
 
   void _voltarHome() {
