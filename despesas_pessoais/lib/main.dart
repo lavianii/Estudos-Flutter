@@ -1,17 +1,17 @@
-import 'package:despesas_pessoais/models/transacao.dart';
+import 'package:despesas_pessoais/componentes/transaction_user.dart';
 import 'package:flutter/material.dart';
 
-main() {
-  runApp(const ExpesesApp());
-}
+main() => runApp(const ExpensesApp());
 
-class ExpesesApp extends StatelessWidget {
-  const ExpesesApp({Key? key}) : super(key: key);
-
+class ExpensesApp extends StatelessWidget {
+  const ExpensesApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      // a pagina inicial do app
       home: MyHomePage(),
+      //remover o debug
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -21,83 +21,42 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _transacao = [
-      Transacao(
-        id: "t1",
-        title: "Novo tenis",
-        value: 310.76,
-        date: DateTime.now(),
-      ),
-      Transacao(
-        id: "t2",
-        title: "Conta de luz",
-        value: 290.12,
-        date: DateTime.now(),
-      ),
-    ];
-
+    //criando a pagina do app
     return Scaffold(
+      //parte superior do app
       appBar: AppBar(
-        title: const Text("Despesesas Pessoais"),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const SizedBox(
-            child: Card(
-              color: Colors.blue,
-              elevation: 5,
-              child: Text("Gráfico"),
-            ),
+        title: const Text('Despesas Pessoais'),
+        //criando o botao na appbar
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {},
           ),
-          Column(
-            children: _transacao.map((tr) {
-              return Card(
-                child: Row(children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.purple,
-                        width: 2,
-                      ),
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      tr.value.toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.purple),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        tr.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        tr.date.toString(),
-                        style: const TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  )
-                ]),
-              );
-            }).toList(),
-          )
         ],
+      ),
+      //Colocando scrool no app para nao bugar
+      body: SingleChildScrollView(
+        child: Column(
+          //colocando o conteudo na vertical
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: const [
+            //estilizando o texto
+            SizedBox(
+              child: Card(
+                color: Colors.blue,
+                elevation: 5,
+                child: Text('Gráfico'),
+              ),
+            ),
+            //componente de transacao
+            TransactionUser(),
+          ],
+        ),
+      ),
+      //botao na parte inferior do app
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {},
       ),
     );
   }
